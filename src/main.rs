@@ -1,6 +1,6 @@
-use image::io::Reader as ImageReader;
 use std::cmp::Ordering;
-use std::path::Path;
+
+mod compare;
 
 fn main() {
     let args = std::env::args().collect::<Vec<_>>();
@@ -15,12 +15,12 @@ fn main() {
             let first = args.get(1).expect("first arg");
             let second = args.get(2).expect("first arg");
 
-            match are_same(first, second) {
+            match compare::are_same(first, second) {
                 Ok(true) => {
-                    println!("Images are the same!")
+                    println!("Pictures are the same")
                 }
                 Ok(false) => {
-                    println!("Images are NOT the same!")
+                    println!("Pictures are different")
                 }
                 Err(e) => {
                     eprint!("An Error occurred: {}", e)
@@ -28,12 +28,4 @@ fn main() {
             }
         }
     }
-}
-
-fn are_same(first: impl AsRef<Path>, second: impl AsRef<Path>) -> Result<bool, anyhow::Error> {
-    let first = ImageReader::open(first)?.decode()?;
-    let second = ImageReader::open(second)?.decode()?;
-    println!("{:?}", first);
-    println!("{:?}", second);
-    Ok(false)
 }
